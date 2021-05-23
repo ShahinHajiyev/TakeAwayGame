@@ -27,17 +27,20 @@ public class LaunchController {
 
     public void whenPressedStart(ActionEvent actionEvent) throws IOException {
 
-        if (firstInput.getText().isEmpty()) {
+        if (firstInput.getText().trim().isEmpty()) {
             errorLabel.setText("* Username is empty!");
         }
-        else if (secondInput.getText().isEmpty()) {
+        else if (secondInput.getText().trim().isEmpty()) {
             errorLabel.setText("* Username is empty!");
         }
 
         else {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/game.fxml"));
             Parent root = fxmlLoader.load();
-            fxmlLoader.<GameController>getController().initdata(firstInput.getText(),secondInput.getText());
+            //fxmlLoader.<GameController>getController().initdata(firstInput.getText(),secondInput.getText());
+            GameController controller= fxmlLoader.<GameController>getController();
+            controller.setPlayerName1(firstInput.getText().trim());
+            controller.setPlayerName2(secondInput.getText().trim());
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
