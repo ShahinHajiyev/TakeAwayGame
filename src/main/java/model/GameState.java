@@ -29,12 +29,10 @@ public class GameState {
         }
     }
 
-
     /**
      * This property is used to be passed to external users.
      */
     private ReadOnlyObjectWrapper<Player> currentPlayer = new ReadOnlyObjectWrapper<>();
-
 
     /**
      * Creates a {@code GameState} object representing that
