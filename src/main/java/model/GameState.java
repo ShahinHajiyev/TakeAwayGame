@@ -55,7 +55,7 @@ public class GameState {
 
     /**
      * The initial state of Stones. When the game starts, this selects one index of boxes randomly
-     * and makes is empty.
+     * and makes it empty.
      */
     public  void initialState() {
 
