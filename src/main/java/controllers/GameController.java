@@ -30,7 +30,7 @@ import java.util.*;
 import java.util.List;
 import static model.Stones.boxes;
 
-@Slf4j
+//@Slf4j
 public class GameController {
     public GameState gameState = new GameState();
     private String firstPlayer;
@@ -127,9 +127,9 @@ public class GameController {
     }
 
     public void finishGame(ActionEvent actionEvent) throws IOException {
-        if (!gameState.isSolved(boxes)) {
+        //if (!gameState.isSolved(boxes)) {
             // gameResultDao.persist(getResult());
-             }
+         //    }
 
             Parent root = FXMLLoader.load(getClass().getResource("/fxml/topFive.fxml"));
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
