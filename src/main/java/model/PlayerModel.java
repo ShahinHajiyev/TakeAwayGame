@@ -18,6 +18,9 @@ public class PlayerModel {
 
     private List<ImageView> boxImageList;
 
+    /**
+     * Constructor initiazlize lists
+     */
     public PlayerModel() {
 
         firstPlayerTurn = true;
@@ -28,8 +31,6 @@ public class PlayerModel {
     /**
      * Switches player's turn.
      * Checking whose turn.
-     * Switching player's turn.
-     * Setting steps of player to 0.
      * @return player's turn.
      */
     public boolean switchPlayer(){

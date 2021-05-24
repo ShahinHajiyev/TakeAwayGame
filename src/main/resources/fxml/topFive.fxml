@@ -1,23 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TopFiveController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TopFiveController">
     <children>
-        <TableView fx:id="toptenTable" editable="true" layoutX="25.0" layoutY="74.0" prefHeight="550.0" prefWidth="650.0">
+        <TableView fx:id="topFiveTable" editable="true" layoutX="25.0" layoutY="75.0" prefHeight="550.0" prefWidth="650.0">
             <columns>
-                <TableColumn fx:id="player" prefWidth="200.0" text="Player" />
-                <TableColumn fx:id="steps" prefWidth="50.0" text="Steps" />
-                <TableColumn fx:id="duration" prefWidth="100.0" text="Duration" />
-                <TableColumn fx:id="created" prefWidth="295.0" text="Date" />
+                <TableColumn fx:id="player" prefWidth="325.99998474121094" text="Player" />
+                <TableColumn fx:id="score" prefWidth="323.60003662109375" text="Score" />
             </columns>
         </TableView>
-        <Label layoutX="272.0" layoutY="32.0" text="Top Five games:">
+        <Label layoutX="272.0" layoutY="32.0" text="Top Five:">
             <font>
                 <Font size="22.0" />
             </font>

@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 import org.tinylog.Logger;
 
 
+import javax.swing.*;
 import java.io.IOException;
 
 
@@ -44,5 +45,12 @@ public class LaunchController {
             stage.show();
             Logger.info("Username is set to {}, loading game scene.", firstInput.getText(), secondInput.getText());
         }
+    }
+
+    public void highScoresOnAction(ActionEvent actionEvent) throws IOException{
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/topFive.fxml"));
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
     }
 }

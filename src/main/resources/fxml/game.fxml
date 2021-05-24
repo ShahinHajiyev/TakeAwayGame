@@ -111,14 +111,13 @@
             </ImageView>
          </children>
       </GridPane>
-      <Button layoutX="188.0" layoutY="517.0" mnemonicParsing="false" onAction="#Reset" prefHeight="25.0" prefWidth="152.0" text="RESET" />
       <Label fx:id="gameOver" layoutX="319.0" layoutY="423.0" prefHeight="46.0" prefWidth="496.0">
          <font>
             <Font size="31.0" />
          </font></Label>
       <Label fx:id="name1" layoutX="92.0" layoutY="20.0" prefHeight="37.0" prefWidth="279.0" text="" />
       <Label fx:id="name2" layoutX="594.0" layoutY="20.0" prefHeight="37.0" prefWidth="279.0" text="" />
-      <Button fx:id="finish" layoutX="596.0" layoutY="517.0" mnemonicParsing="false" onAction="#finishGame" prefHeight="25.0" prefWidth="176.0" text="FINISH" />
+      <Button fx:id="finish" layoutX="376.0" layoutY="528.0" mnemonicParsing="false" onAction="#finishGame" prefHeight="25.0" prefWidth="176.0" text="FINISH" />
       <Button fx:id="openButton" layoutX="388.0" layoutY="190.0" mnemonicParsing="false" onAction="#openBoxAction" prefHeight="25.0" prefWidth="152.0" text="OPEN" />
       <Label fx:id="player1MoveLabel" layoutX="66.0" layoutY="74.0" prefHeight="51.0" prefWidth="213.0" />
       <Label fx:id="player2MoveLabel" layoutX="550.0" layoutY="81.0" prefHeight="51.0" prefWidth="202.0" />

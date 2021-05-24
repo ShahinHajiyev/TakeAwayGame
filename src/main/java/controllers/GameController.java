@@ -7,7 +7,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -19,7 +18,9 @@ import model.PlayerModel;
 import model.ResultModel;
 import model.Stones;
 import org.tinylog.Logger;
+import util.JsonPersist;
 import java.io.IOException;
+import java.time.Instant;
 import java.util.List;
 import static model.Stones.boxes;
 
@@ -72,7 +73,7 @@ public class GameController {
 
     @FXML
     public void initialize() {
-
+        resultModel.setTime(Instant.now());
         int random = gameState.initialState();
         Logger.info("Empty box is assigned to {}th box",random);
     }
@@ -127,6 +128,7 @@ public class GameController {
             if(Math.abs(boxList.get(0) - boxList.get(1)) == 1){
                 openBox(boxList.get(0), boxImageList.get(0));
                 openBox(boxList.get(1), boxImageList.get(1));
+                resultModel.modifyMoves(playerModel,2);
                 clearBoxList(boxList,boxImageList);
                 adjacentLabel.setText("");
                 switchPlayer(playerModel.switchPlayer());
@@ -140,33 +142,27 @@ public class GameController {
         }
         else if(boxList.size() == 1) {
             openBox(boxList.get(0), boxImageList.get(0));
+            resultModel.modifyMoves(playerModel,1);
             clearBoxList(boxList,boxImageList);
             adjacentLabel.setText("");
            switchPlayer(playerModel.switchPlayer());
         }
     }
 
-
     public void switchPlayer(boolean playerTurn){
        if(!gameState.isSolved(boxes)) {
            if (playerTurn) {
                player2MoveLabel.setText("");
-               player1MoveLabel.setText(name1.getText() + "s move");
+               player1MoveLabel.setText(name1.getText() + "'s move");
            } else {
                player1MoveLabel.setText("");
-               player2MoveLabel.setText(name2.getText() + "s move");
+               player2MoveLabel.setText(name2.getText() + "'s move");
            }
        }
     }
 
     public void openBoxAction(ActionEvent actionEvent) {
         checkBoxesAndOpen(playerModel.getBoxList(),playerModel.getBoxImageList());
-    }
-
-    public void Reset(ActionEvent actionEvent) {
-       clearBoxList(playerModel.getBoxList(),playerModel.getBoxImageList());
-        stones.initializeBoxes();
-        Logger.info("Game reset");
     }
 
     public void finishGame(ActionEvent actionEvent) throws IOException {
@@ -177,6 +173,7 @@ public class GameController {
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.show();
+        JsonPersist.writer(resultModel);
 
     }
 
@@ -184,7 +181,6 @@ public class GameController {
         boxList.clear();
         boxImageList.clear();
     }
-
 }
 
 
