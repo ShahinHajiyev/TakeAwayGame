@@ -1,9 +1,6 @@
 package controllers;
 
 
-import javafx.beans.binding.Bindings;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,47 +9,36 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import model.GameState;
+import model.PlayerModel;
+import model.ResultModel;
+import model.Stones;
 import org.tinylog.Logger;
-import java.io.File;
 import java.io.IOException;
-import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
-
 import static model.Stones.boxes;
 
 
 public class GameController {
-    public GameState gameState = new GameState();
-    private String firstPlayer;
-    private String secondPlayer;
-    private Instant beginGame;
-    private List<Image> stones;
 
-    private boolean player1Move = true;
-
-    private List<Integer> boxList = new ArrayList<>();
-
-    private List<ImageView> boxImageList = new ArrayList<>();
-
-    @FXML
-    private GridPane gameGrid;
+    private PlayerModel playerModel = new PlayerModel();
+    private ResultModel resultModel = new ResultModel();
+    private GameState gameState = new GameState();
+    private Stones stones = new Stones();
 
     @FXML
     private Label gameOver;
 
     @FXML
-    private TextField name1;
+    private Label name1;
 
     @FXML
-    private TextField name2;
+    private Label name2;
 
     @FXML
     private Label player1MoveLabel;
@@ -61,137 +47,38 @@ public class GameController {
     private Label player2MoveLabel;
 
     @FXML
-    private Button finish;
+    private Label adjacentLabel;
 
 
+     public void start(String player1, String player2){
+         resultModel.setFirstPlayerName(player1);
+         resultModel.setSecondPlayerName(player2);
+         name1.setText(resultModel.getFirstPlayerName());
+         name2.setText(resultModel.getSecondPlayerName());
+         player1MoveLabel.setText(name1.getText() + "'s move");
+     }
 
 
-    private StringProperty playerName1 = new SimpleStringProperty();
-    private StringProperty playerName2 = new SimpleStringProperty();
+    private Image stone = new Image(getClass().getResource("/pictures/stoneimage.png").toExternalForm());
 
 
-
-    public void setPlayerName1(String name1) {
-        this.playerName1.set(name1);
-    }
-    public void setPlayerName2(String name2) {
-        this.playerName2.set(name2);
-    }
-
-    File file = new File("src/main/resources/pictures/stoneimage.png");    // it is forbidden
-    Image stone = new Image(file.toURI().toString());
-
-
-   /* public void pressKey(MouseEvent mouseEvent) {
-
-        var column = GridPane.getColumnIndex((Node) mouseEvent.getSource());
-        ImageView im = (ImageView) mouseEvent.getTarget();
-
-
-
-            if (!gameState.isSolved(boxes)) {
-
-                if (boxes.get(column) == 1) {
-
-                    im.setImage(stone);
-                    boxes.set(column, 2);
-                    if (gameState.isSolved(boxes)) {
-                        System.out.println("Game is finished");
-                        gameOver.setText("GAME IS FINISHED!");
-                    }
-                }
-                    else if (boxes.get(column) == 0) {
-                        im.setImage(null);
-                    }
-            }
-                else {
-                    System.out.println("Game is finished!");
-                    gameOver.setText("GAME IS FINISHED!");
-                }
-        }
-*/
     public void pressKey(MouseEvent mouseEvent) {
         var column = GridPane.getColumnIndex((Node) mouseEvent.getSource());
         ImageView im = (ImageView) mouseEvent.getTarget();
 
-        boxList.add(column);
-        boxImageList.add(im);
+        playerModel.getBoxList().add(column);
+        playerModel.getBoxImageList().add(im);
     }
 
     @FXML
     public void initialize() {
 
-
-        name1.textProperty().bind(Bindings.concat(playerName1));
-        name2.textProperty().bind(Bindings.concat(playerName2));
-
-        gameState.initialState();
-        player1MoveLabel.setText(name1.getText() + "'s move");
+        int random = gameState.initialState();
+        Logger.info("Empty box is assigned to {}th box",random);
     }
 
 
-    public void Reset(ActionEvent actionEvent) {
 
-
-
-        Logger.info("Game reset");
-    }
-
-    public void finishGame(ActionEvent actionEvent) throws IOException {
-        //if (!gameState.isSolved(boxes)) {
-            // gameResultDao.persist(getResult());
-         //    }
-
-            Parent root = FXMLLoader.load(getClass().getResource("/fxml/topFive.fxml"));
-            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-            Logger.info("Finished game, press finish to view results.");
-        }
-
-    public void openBoxAction(ActionEvent actionEvent) {
-        checkBoxesAndOpen(boxList,boxImageList);
-    }
-
-    public void checkBoxesAndOpen(List<Integer> boxList, List<ImageView> boxImageList){
-        if(boxList.size() > 2){
-            System.out.println("Cannot select 3 or more boxes");
-            clearBoxList(boxList,boxImageList);
-        }
-        else if(boxList.size() == 0){
-            System.out.println("Please choose the box or boxes");
-        }
-        else if(boxList.size() == 2){
-            if(Math.abs(boxList.get(0) - boxList.get(1)) == 1){
-                openBox(boxList.get(0), boxImageList.get(0));
-                openBox(boxList.get(1), boxImageList.get(1));
-                clearBoxList(boxList,boxImageList);
-                switchPlayer();
-            }
-            else {
-                System.out.println("Boxes should be adjacent");
-                clearBoxList(boxList,boxImageList);
-            }
-        }
-        else if(boxList.size() == 1) {
-            openBox(boxList.get(0), boxImageList.get(0));
-            clearBoxList(boxList,boxImageList);
-            switchPlayer();
-        }
-    }
-
-    private void switchPlayer() {
-        if(player1Move){
-            player1Move  = false;
-            player1MoveLabel.setText("");
-            player2MoveLabel.setText(name2.getText() + "'s move");
-        }
-        else {
-            player1Move = true;
-            player2MoveLabel.setText("");
-            player1MoveLabel.setText(name1.getText() + "'s move");
-        }
-    }
 
     public void openBox(int column, ImageView imageView){
         if (!gameState.isSolved(boxes)) {
@@ -199,8 +86,9 @@ public class GameController {
                 imageView.setImage(stone);
                 boxes.set(column, 2);
                 if (gameState.isSolved(boxes)) {
-                    System.out.println("Game is finished");
-                    gameOver.setText("GAME IS FINISHED!");
+                    gameOver();
+                    adjacentLabel.setText("GAME IS FINISHED!");
+                    Logger.info("Game is finished, press finish to view results.");
                 }
             }
             else if (boxes.get(column) == 0) {
@@ -208,15 +96,95 @@ public class GameController {
             }
         }
         else {
-            System.out.println("Game is finished!");
-            gameOver.setText("GAME IS FINISHED!");
+            gameOver();
+            adjacentLabel.setText("GAME IS FINISHED!");
+            Logger.info("Game is finished, press finish to view results.");
         }
+    }
+
+    public void gameOver(){
+        if(playerModel.isFirstPlayerTurn()){
+            gameOver.setText(name1.getText() + " won the game!");
+            resultModel.setWinner(name1.getText());
+        }
+        else{
+            gameOver.setText(name2.getText() + " won the game!");
+            resultModel.setWinner(name2.getText());
+        }
+    }
+
+    public void checkBoxesAndOpen(List<Integer> boxList, List<ImageView> boxImageList){
+        if(boxList.size() > 2){
+            adjacentLabel.setText("Cannot select more than 2 boxes");
+            Logger.warn("To choose more than 2 boxes is forbidden!");
+            clearBoxList(boxList,boxImageList);
+        }
+        else if(boxList.size() == 0){
+            adjacentLabel.setText("Please, choose box or 2 adjacent boxes");
+            Logger.warn("Select a box or boxes!");
+        }
+        else if(boxList.size() == 2){
+            if(Math.abs(boxList.get(0) - boxList.get(1)) == 1){
+                openBox(boxList.get(0), boxImageList.get(0));
+                openBox(boxList.get(1), boxImageList.get(1));
+                clearBoxList(boxList,boxImageList);
+                adjacentLabel.setText("");
+                switchPlayer(playerModel.switchPlayer());
+
+            }
+            else {
+                clearBoxList(boxList,boxImageList);
+                adjacentLabel.setText("Boxes should be adjacent");
+                Logger.warn("Boxes are not adjacent!");
+            }
+        }
+        else if(boxList.size() == 1) {
+            openBox(boxList.get(0), boxImageList.get(0));
+            clearBoxList(boxList,boxImageList);
+            adjacentLabel.setText("");
+           switchPlayer(playerModel.switchPlayer());
+        }
+    }
+
+
+    public void switchPlayer(boolean playerTurn){
+       if(!gameState.isSolved(boxes)) {
+           if (playerTurn) {
+               player2MoveLabel.setText("");
+               player1MoveLabel.setText(name1.getText() + "s move");
+           } else {
+               player1MoveLabel.setText("");
+               player2MoveLabel.setText(name2.getText() + "s move");
+           }
+       }
+    }
+
+    public void openBoxAction(ActionEvent actionEvent) {
+        checkBoxesAndOpen(playerModel.getBoxList(),playerModel.getBoxImageList());
+    }
+
+    public void Reset(ActionEvent actionEvent) {
+       clearBoxList(playerModel.getBoxList(),playerModel.getBoxImageList());
+        stones.initializeBoxes();
+        Logger.info("Game reset");
+    }
+
+    public void finishGame(ActionEvent actionEvent) throws IOException {
+
+        clearBoxList(playerModel.getBoxList(),playerModel.getBoxImageList());
+        stones.initializeBoxes();
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/topFive.fxml"));
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
+
     }
 
     public void clearBoxList(List<Integer> boxList, List<ImageView> boxImageList){
         boxList.clear();
         boxImageList.clear();
     }
+
 }
 
 

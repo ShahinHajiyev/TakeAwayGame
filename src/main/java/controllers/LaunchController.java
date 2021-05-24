@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import org.tinylog.Logger;
 
 
 import java.io.IOException;
@@ -37,14 +38,11 @@ public class LaunchController {
         else {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/game.fxml"));
             Parent root = fxmlLoader.load();
-            //fxmlLoader.<GameController>getController().initdata(firstInput.getText(),secondInput.getText());
-            GameController controller= fxmlLoader.<GameController>getController();
-            controller.setPlayerName1(firstInput.getText().trim());
-            controller.setPlayerName2(secondInput.getText().trim());
+            fxmlLoader.<GameController>getController().start(firstInput.getText(),secondInput.getText());
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
-            //log.info("Username is set to {}, loading game scene.", firstInput.getText(), secondInput.getText());
+            Logger.info("Username is set to {}, loading game scene.", firstInput.getText(), secondInput.getText());
         }
     }
 }
